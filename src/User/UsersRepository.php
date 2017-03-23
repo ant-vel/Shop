@@ -40,7 +40,7 @@ class UsersRepository
 	 */
 	public function __construct(Container $container)
     {
-        $model = Antvel::userModel();
+        $model = Antvel::user();
         $this->model = new $model;
         $this->auth = $container->make('auth');
     }

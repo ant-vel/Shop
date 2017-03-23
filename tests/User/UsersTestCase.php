@@ -9,25 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace Antvel\Tests\Customers;
+namespace Antvel\Tests\User;
 
 use Antvel\Tests\TestCase;
 use Antvel\Tests\Stubs\User;
+use Antvel\User\Models\Person;
 
 abstract class UsersTestCase extends TestCase
 {
-	protected function user(array $data = [], bool $create = true, int $number = 1)
+	protected function user(array $data = [], int $number = 1)
 	{
-		if ($create) {
-			return $this->createUser($data, $number);
-		}
-
-		return factory(User::class)->make($data)->first();
+		return factory(User::class, $number)
+			->create($data)
+			->first();
 	}
 
-	protected function createUser(array $data = [], int $number)
+	protected function person(array $data = [], int $number = 1)
 	{
-		return factory(User::class, $number)->create($data)->first();
+		return factory(Person::class, $number)
+			->create($data)
+			->first();
 	}
-
 }

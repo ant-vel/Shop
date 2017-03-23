@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Antvel\Tests\Customers;
+namespace Antvel\Tests\User;
 
 use Antvel\User\Models\Business;
 use Illuminate\Contracts\Auth\Authenticatable;

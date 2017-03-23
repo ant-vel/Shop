@@ -27,7 +27,7 @@ class CreatePersonsTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->date('birthday')->nullable();
-            $table->enum('gender', array_keys(['female' => 'Female', 'male' => 'Male']));
+            $table->enum('gender', array_keys(['female' => 'Female', 'male' => 'Male']))->default('male');
             $table->string('home_phone')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
         });

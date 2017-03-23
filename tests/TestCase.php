@@ -12,29 +12,11 @@
 namespace Antvel\Tests;
 
 use Antvel\Antvel;
-use Antvel\Tests\Traits\Environment;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
     use Environment;
-
-    /**
-     * Contains the database schema information.
-     *
-     * @var array
-     */
-    protected $schema = null;
-
-    /**
-     * Create a new Invitations instance.
-     *
-     * @return  void
-     */
-    public function __construct()
-    {
-        $this->schema = require(__DIR__ . '/config/database.php');
-    }
 
     /**
      * Setup the test environment
@@ -48,6 +30,4 @@ abstract class TestCase extends Orchestra
         $this->loadFactories();
         $this->loadMigrations();
     }
-
-
 }

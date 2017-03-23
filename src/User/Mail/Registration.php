@@ -26,14 +26,14 @@ class Registration extends Mailable implements ShouldQueue
      *
      * @var Authenticatable
      */
-    protected $user = null;
+    public $user = null;
 
     /**
      * The email template.
      *
      * @var array
      */
-    protected $template = [];
+    public $template = [];
 
     /**
      * Create a new message instance.

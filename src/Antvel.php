@@ -38,7 +38,7 @@ class Antvel
      */
     public static function doesntHaveUserModel()
     {
-        $model = static::userModel();
+        $model = static::user();
 
         if (is_null($model) || ! class_exists($model)) {
             return true;
@@ -52,7 +52,7 @@ class Antvel
      *
      * @return null|App\User
      */
-    public static function userModel()
+    public static function user()
     {
         if (static::$testsAreRunning) {
             //If phpunit is running, we retrieve the user model stub for testing purposes.

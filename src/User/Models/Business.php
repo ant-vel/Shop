@@ -65,6 +65,6 @@ class Business extends Model
      */
     public function user()
     {
-        return $this->belongsTo(Antvel::userModel());
+        return $this->belongsTo(Antvel::user());
     }
 }

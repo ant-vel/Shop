@@ -29,16 +29,9 @@ class Register
     /**
      * The registered user.
      *
-     * @var Illuminate\Contracts\Auth\Authenticatable
+     * @var Antvel\User
      */
     protected $user = null;
-
-    /**
-     * The user model.
-     *
-     * @var Illuminate\Contracts\Auth\Authenticatable
-     */
-    protected $userModel = null;
 
     /**
      * The Laravel session component.
@@ -71,7 +64,7 @@ class Register
     {
         $this->mailer = $mailer;
         $this->session = $session;
-        $this->userModel = Antvel::userModel();
+        $this->user = Antvel::user();
     }
 
     /**
@@ -83,7 +76,7 @@ class Register
     public function store(RegisterRequest $request): self
     {
         //we create the user with the given request.
-        $this->user = $this->userModel::create([
+        $this->user = $this->user::create([
             'password' => bcrypt($request->get('password')),
             'confirmation_token' => str_random(60),
             'nickname' => $request->get('email'),

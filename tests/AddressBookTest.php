@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Antvel\Tests\AddressBook;
+namespace Antvel\Tests;
 
 use Antvel\Tests\TestCase;
 use Antvel\Tests\Stubs\User;
@@ -87,7 +87,9 @@ class AddressBookTest extends TestCase
         ]);
 
         $this->addressBook->destroy($address->id);
-        $this->addressBook->find($address->id)->first();
+        $address = $this->addressBook->find($address->id)->first();
+
+        $this->assertNull($address);
     }
 
     public function test_retrieves_addresses_for_a_logged_user()

@@ -9,11 +9,11 @@
  * file that was distributed with this source code.
  */
 
-namespace Antvel\AddressBook;
+namespace Antvel\User\Requests;
 
 use Antvel\Foundation\Http\Request;
 
-class AddressBookRequest extends Request
+class LoginRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,17 +30,17 @@ class AddressBookRequest extends Request
      *
      * @return array
      */
-    public function rules()
+    public function rules() : array
     {
-        return [
-            'line2' => 'max:100',
-            'country' => 'required',
-            'city' => 'required|string',
-            'state' => 'required|string',
-            'phone' => 'required|max:20',
-            'line1' => 'required|max:100',
-            'zipcode' => 'required|min:3',
-            'name_contact' => 'required|string|max:60'
-          ];
+        $rules = [
+            'email' => 'required|email',
+            'password' => 'required',
+        ];
+
+        if (! env('APP_DEBUG')) {
+            $rules['g-recaptcha-response'] = 'required|recaptcha';
+        }
+
+        return $rules;
     }
 }

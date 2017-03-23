@@ -73,7 +73,7 @@ class Confirmation
      */
     protected function fetch()
     {
-    	$user = Antvel::userModel();
+    	$user = Antvel::user();
 
     	return $user::where([
             'confirmation_token' => $this->token,

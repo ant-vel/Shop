@@ -11,10 +11,9 @@
 
 use Antvel\Antvel;
 use Faker\Generator as Faker;
-use Antvel\AddressBook\Models\Address;
-use Antvel\User\Models\{ Person, Business };
+use Antvel\User\Models\{ Person, Business, EmailChangePetition };
 
-$factory->define(Antvel::userModel(), function (Faker $faker) use ($factory)
+$factory->define(Antvel::user(), function (Faker $faker) use ($factory)
 {
     return [
         'password' => bcrypt('123456'),
@@ -32,7 +31,7 @@ $factory->define(Person::class, function (Faker $faker) use ($factory)
 {
     return [
         'user_id' => function () {
-            return factory(Antvel::userModel())->create()->id;
+            return factory(Antvel::user())->create()->id;
         },
         'last_name' => $faker->lastName,
         'first_name' => $faker->firstName,
@@ -46,7 +45,7 @@ $factory->define(Business::class, function (Faker $faker) use ($factory)
 {
     return [
         'user_id' => function () {
-            return factory(Antvel::userModel())->create()->id;
+            return factory(Antvel::user())->create()->id;
         },
         'creation_date' => $faker->date(),
         'business_name' => $faker->company,
@@ -54,20 +53,18 @@ $factory->define(Business::class, function (Faker $faker) use ($factory)
     ];
 });
 
-$factory->define(Address::class, function (Faker $faker) use ($factory)
+$factory->define(EmailChangePetition::class, function (Faker $faker) use ($factory)
 {
+    //str_random
     return [
         'user_id' => function () {
-            return factory(Antvel::userModel())->create()->id;
+            return factory(Antvel::user())->create()->id;
         },
-        'default' => 0,
-        'city' => $faker->city,
-        'state' => $faker->state,
-        'country' => $faker->country,
-        'zipcode' => $faker->postcode,
-        'line1' => $faker->streetAddress,
-        'line2' => $faker->streetAddress,
-        'phone' => $faker->e164PhoneNumber,
-        'name_contact' => $faker->streetName,
+        'old_email' => $faker->email,
+        'new_email' => $faker->email,
+        'token' => $faker->unique()->randomDigit,
+        'confirmed' => '0',
+        'expires_at' => Carbon::now(),
+        'confirmed_at' => ''
     ];
 });

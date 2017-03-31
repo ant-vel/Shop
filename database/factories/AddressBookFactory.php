@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use Antvel\Antvel;
+use Antvel\User\Models\User;
 use Faker\Generator as Faker;
 use Antvel\AddressBook\Models\Address;
 
@@ -17,7 +17,7 @@ $factory->define(Address::class, function (Faker $faker) use ($factory)
 {
     return [
         'user_id' => function () {
-            return factory(Antvel::user())->create()->id;
+            return factory(User::class)->create()->id;
         },
         'default' => 0,
         'city' => $faker->city,

@@ -65,6 +65,16 @@ class Person extends Model
      */
     public function user()
     {
-        return $this->belongsTo(Antvel::user());
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Returns the user full name.
+     *
+     * @return string
+     */
+    public function getFullNameAttribute()
+    {
+        return ucwords($this->first_name . ' ' . $this->last_name);
     }
 }

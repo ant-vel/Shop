@@ -12,8 +12,7 @@
 namespace Antvel\Tests\User;
 
 use Antvel\Tests\TestCase;
-use Antvel\Tests\Stubs\User;
-use Antvel\User\Models\Person;
+use Antvel\User\Models\{ User, Person, Business };
 
 abstract class UsersTestCase extends TestCase
 {
@@ -27,6 +26,13 @@ abstract class UsersTestCase extends TestCase
 	protected function person(array $data = [], int $number = 1)
 	{
 		return factory(Person::class, $number)
+			->create($data)
+			->first();
+	}
+
+	protected function business(array $data = [], int $number = 1)
+	{
+		return factory(Business::class, $number)
 			->create($data)
 			->first();
 	}

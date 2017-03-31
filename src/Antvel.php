@@ -13,67 +13,31 @@ namespace Antvel;
 
 use Illuminate\Container\Container;
 use Illuminate\Support\Facades\Route;
-use Antvel\Foundation\Support\{ EventsRegistrar, PoliciesRegistrar, RoutesRegistrar };
 
 class Antvel
 {
     /**
-     * The antvel version.
+     * The Antvel Shop version.
      *
      * @var string
      */
-    const VERSION = '1.0.0';
+    const VERSION = '1.0.2';
 
     /**
-     * Controls whether tests are running.
+     * The Laravel container component.
      *
-     * @var boolean
+     * @var Container
      */
-    protected static $testsAreRunning = false;
+    protected $container = null;
 
     /**
-     * Checks whether the app user model is valid.
-     *
-     * @return bool
-     */
-    public static function doesntHaveUserModel()
-    {
-        $model = static::user();
-
-        if (is_null($model) || ! class_exists($model)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns the applications user model.
-     *
-     * @return null|App\User
-     */
-    public static function user()
-    {
-        if (static::$testsAreRunning) {
-            //If phpunit is running, we retrieve the user model stub for testing purposes.
-            return \Antvel\Tests\Stubs\User::class;
-        }
-
-        $config = Container::getInstance()->make('config');
-
-        return $config->get('auth.providers.users.model');
-    }
-
-    /**
-     * Tells the application that tests are about to start.
+     * Creates a new instance.
      *
      * @return void
      */
-    public static function beginsTests()
+    public function __construct()
     {
-        //Allows the application knows whether phpunit is running,
-        //so we can swap the user models by the testing one.
-        static::$testsAreRunning = true;
+        $this->container = Container::getInstance();
     }
 
     /**
@@ -83,7 +47,7 @@ class Antvel
      */
     public static function events()
     {
-        (new EventsRegistrar)->registrar();
+        (new \Antvel\Foundation\Support\EventsRegistrar)->registrar();
     }
 
     /**
@@ -93,7 +57,7 @@ class Antvel
      */
     public static function policies()
     {
-        (new PoliciesRegistrar)->registrar();
+        (new \Antvel\Foundation\Support\PoliciesRegistrar)->registrar();
     }
 
     /**
@@ -109,7 +73,7 @@ class Antvel
         };
 
         Route::group($options, function ($router) use ($callback) {
-            $callback(new RoutesRegistrar($router));
+            $callback(new \Antvel\Foundation\Support\RoutesRegistrar($router));
         });
     }
 }

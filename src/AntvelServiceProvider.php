@@ -11,9 +11,7 @@
 
 namespace Antvel;
 
-use Antvel\Antvel;
 use Illuminate\Support\ServiceProvider;
-use Antvel\Exceptions\UserModelDoesnotExistException;
 
 class AntvelServiceProvider extends ServiceProvider
 {
@@ -31,11 +29,20 @@ class AntvelServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //if the application user model was not provided, we throw an exception.
-        if (Antvel::doesntHaveUserModel()) {
-           throw new UserModelDoesnotExistException;
-        }
+        $this->loadResources();
 
+        if ($this->app->runningInConsole()) {
+            $this->publishResources();
+        }
+    }
+
+    /**
+     * Loads the Antvel resources.
+     *
+     * @return void
+     */
+    protected function loadResources()
+    {
         $this->loadTranslationsFrom(
             realpath(__DIR__ . '/../resources/lang')
         , 'antvel');
@@ -43,10 +50,6 @@ class AntvelServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(
             __DIR__ . '/../database/migrations'
         );
-
-        if ($this->app->runningInConsole()) {
-            $this->publishAntvelResources();
-        }
     }
 
     /**
@@ -54,7 +57,7 @@ class AntvelServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function publishAntvelResources()
+    protected function publishResources()
     {
         $this->publishes([
             __DIR__ . '/../config/' => config_path()
@@ -86,6 +89,6 @@ class AntvelServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['antvel'];
+        return [Antvel::class];
     }
 }

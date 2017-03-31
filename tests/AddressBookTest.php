@@ -12,7 +12,7 @@
 namespace Antvel\Tests;
 
 use Antvel\Tests\TestCase;
-use Antvel\Tests\Stubs\User;
+use Antvel\User\Models\User;
 use Antvel\AddressBook\AddressBook;
 use Antvel\AddressBook\Models\Address;
 

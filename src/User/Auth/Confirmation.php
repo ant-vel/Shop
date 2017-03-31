@@ -11,7 +11,7 @@
 
 namespace Antvel\User\Auth;
 
-use Antvel\Antvel;
+use Antvel\User\Models\User;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 
@@ -73,9 +73,7 @@ class Confirmation
      */
     protected function fetch()
     {
-    	$user = Antvel::user();
-
-    	return $user::where([
+    	return User::where([
             'confirmation_token' => $this->token,
             'email' => $this->email,
             'verified' => 'no',

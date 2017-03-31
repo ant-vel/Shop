@@ -65,6 +65,16 @@ class Business extends Model
      */
     public function user()
     {
-        return $this->belongsTo(Antvel::user());
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Returns the user full name.
+     *
+     * @return string
+     */
+    public function getFullNameAttribute()
+    {
+        return ucwords($this->business_name);
     }
 }

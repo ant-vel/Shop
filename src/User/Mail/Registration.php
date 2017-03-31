@@ -70,7 +70,7 @@ class Registration extends Mailable implements ShouldQueue
     	 return $this->subject($this->template['subject'])
             ->to($this->user->email)
             ->view($this->template['view'], [
-                'name' => $this->user->fullName,
+                'name' => $this->user->profile->fullName,
                 'route' => $this->route(),
         ]);
     }

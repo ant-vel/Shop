@@ -11,7 +11,7 @@
 
 namespace Antvel\User\Auth;
 
-use Antvel\Antvel;
+use Antvel\User\Models\User;
 use Antvel\User\Mail\Registration;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Session\Store as Session;
@@ -64,7 +64,6 @@ class Register
     {
         $this->mailer = $mailer;
         $this->session = $session;
-        $this->user = Antvel::user();
     }
 
     /**
@@ -76,7 +75,7 @@ class Register
     public function store(RegisterRequest $request): self
     {
         //we create the user with the given request.
-        $this->user = $this->user::create([
+        $this->user = User::create([
             'password' => bcrypt($request->get('password')),
             'confirmation_token' => str_random(60),
             'nickname' => $request->get('email'),

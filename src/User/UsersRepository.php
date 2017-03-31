@@ -11,21 +11,14 @@
 
 namespace Antvel\User;
 
-use Antvel\Antvel;
 use Carbon\Carbon;
+use Antvel\User\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 class UsersRepository
 {
-	/**
-	 * The application user model.
-	 *
-	 * @var Authenticatable
-	 */
-	protected $model = null;
-
     /**
      * The laravel auth component.
      *
@@ -40,8 +33,6 @@ class UsersRepository
 	 */
 	public function __construct(Container $container)
     {
-        $model = Antvel::user();
-        $this->model = new $model;
         $this->auth = $container->make('auth');
     }
 
@@ -87,7 +78,7 @@ class UsersRepository
 	{
         //We fetch the user using either the given id. If the id was not given,
         //we use the one in session..
-        $user = $this->model->where('id', $user_id ?? $this->id)->first();
+        $user = User::where('id', $user_id ?? $this->id)->first();
 
         //We throw an exception if the user was not found, so we avoid the fact
         //that somebody tries to look for a non-existent user..

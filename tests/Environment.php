@@ -22,11 +22,7 @@ trait Environment
      */
     protected function loadMigrations()
     {
-        Artisan::call('migrate:refresh');
-
-        $this->artisan('migrate', [
-            '--realpath' => __DIR__ . '/../database/migrations'
-        ]);
+        $this->artisan('migrate');
     }
 
     /**

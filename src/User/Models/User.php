@@ -9,16 +9,49 @@
  * file that was distributed with this source code.
  */
 
-namespace Antvel\User;
+namespace Antvel\User\Models;
 
+use Illuminate\Auth\Authenticatable;
 use Antvel\AddressBook\Models\Address;
-use Antvel\User\Models\ { Person, Business, Presenters, EmailChangePetition };
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Antvel\User\Notifications\ResetPasswordNotification;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-trait hasAntvel
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Presenters;
+	use Authenticatable, CanResetPassword, SoftDeletes, Notifiable;
+
+	/**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+	protected $fillable = [
+        'facebook', 'mobile_phone', 'work_phone', 'description',
+        'pic_url', 'language', 'website', 'twitter',
+        'nickname', 'email', 'password', 'role',
+        'disabled_at', 'confirmation_token'
+    ];
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['password', 'remember_token'];
+
+     /**
      * Returns the user profile.
      *
      * @return mixed
@@ -51,6 +84,18 @@ trait hasAntvel
     {
         return $this->hasMany(EmailChangePetition::class);
     }
+
+    /**
+     * Send the password reset notification mail.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
+
 
 
 

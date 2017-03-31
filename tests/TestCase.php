@@ -26,7 +26,6 @@ abstract class TestCase extends Orchestra
     public function setUp()
     {
         parent::setUp();
-        Antvel::beginsTests();
         $this->loadFactories();
         $this->loadMigrations();
     }

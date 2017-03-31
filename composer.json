@@ -3,9 +3,16 @@
     "name": "antvel/shop",
     "homepage": "http://antvel.com",
     "type": "laravel-bundle",
-    "description": "The Laravel e-commerce shop core.",
+    "description": "The Antvel e-commerce Framework.",
     "keywords": ["antvel", "laravel", "e-commerce", "ecommerce", "shop", "portal", "market", "store"],
     "minimum-stability": "dev",
+
+    "authors": [
+        {
+            "name": "Gustavo Ocanto",
+            "email": "gustavoocanto@gmail.com"
+        }
+    ],
 
     "support": {
         "source": "https://github.com/ant-vel/Shop",
@@ -14,7 +21,8 @@
 
     "require": {
         "php": "~7.0|~7.1",
-        "nesbot/carbon": "^1.21"
+        "nesbot/carbon": "^1.21",
+        "illuminate/support": "5.4.*"
     },
 
     "require-dev": {

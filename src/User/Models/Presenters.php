@@ -14,18 +14,6 @@ namespace Antvel\User\Models;
 trait Presenters
 {
     /**
-     * Returns the user full name.
-     *
-     * @return string
-     */
-    public function getFullNameAttribute()
-    {
-        $firstName = ($this->isPerson() || $this->isAdmin()) ? 'first_name' : 'business_name';
-
-        return ucwords($this->profile->$firstName . ' ' . $this->profile->last_name);
-    }
-
-    /**
      * Checks whether the user has a phone number.
      *
      * @return bool

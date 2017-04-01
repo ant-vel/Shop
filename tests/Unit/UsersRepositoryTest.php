@@ -11,6 +11,7 @@
 
 namespace Antvel\Tests\Unit;
 
+use Antvel\User\Models\Person;
 use Illuminate\Support\Collection;
 use Antvel\Tests\User\UsersTestCase;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -74,7 +75,7 @@ class UsersRepositoryTest extends UsersTestCase
 		$this->assertTrue($profile->profile->count() > 0);
 	}
 
-	public function test_a_repository_can_user_profile()
+	public function test_a_repository_can_show_a_user_profile()
 	{
 		$profile = $this->repository->profile(
 			$this->person->user_id
@@ -100,6 +101,30 @@ class UsersRepositoryTest extends UsersTestCase
 		$this->assertEquals($newPerson->nickname, 'gocanto');
 	}
 
+	public function test_a_repository_is_able_to_create_a_user_profile()
+	{
+		$user = $this->repository->create([
+            'password' => '123456',
+            'email' => 'gustavoocanto@gmail.com',
+            'nickname' => 'gocanto',
+            'role' => 'person',
+            'profile' => [
+                'first_name' => 'Gustavo',
+                'last_name'  => 'Ocanto',
+            ]
+        ]);
+
+		$this->assertInstanceOf(Authenticatable::class, $user);
+        $this->assertInstanceOf(Person::class, $user->profile);
+        $this->assertEquals($user->email, 'gustavoocanto@gmail.com');
+        $this->assertEquals($user->profile->fullName, 'Gustavo Ocanto');
+
+		$this->assertTrue(
+			$this->app->make('hash')->check('123456', $user->password)
+		);
+
+	}
+
 	public function test_a_repository_is_able_to_update_the_user_password()
 	{
 		$this->repository->update($this->person->user, [
@@ -107,12 +132,29 @@ class UsersRepositoryTest extends UsersTestCase
 		]);
 
 		$hash = $this->app->make('hash');
-		$password = $hash->make('123456');
 
 		$newPerson = $this->repository->profile($this->person->user_id);
 
 		$this->assertTrue(
 			$hash->check('123456', $newPerson->password)
 		);
+	}
+
+	public function test_a_repository_can_enable_users()
+	{
+		$user_id = $this->person->user_id;
+
+		$this->repository->enable($user_id);
+
+		$this->assertNull($this->person->user->disabled_at);
+	}
+
+	public function test_a_repository_can_disable_users()
+	{
+		$user_id = $this->person->user_id;
+
+		$this->repository->disable($user_id);
+
+		$this->assertTrue(! is_null($this->person->user->disabled_at));
 	}
 }

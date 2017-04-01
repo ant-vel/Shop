@@ -76,7 +76,9 @@ class UpdateProfile
     {
         $request = $event->request;
 
-        return isset($request['email']) && $request['email'] != $event->user->email;
+        return isset($request['email']) &&
+            $request['email'] != $event->user->email &&
+            $request['email'] !== null;
     }
 
     /**
@@ -91,5 +93,11 @@ class UpdateProfile
             'user_id' => $event->user->id,
             'request' => $event->request,
         ]);
+
+        //We delete the email field because the user will have to confirm it clicking
+        //on the link sent to his requested email address.
+        if (isset($event->request['email'])) {
+            unset($event->request['email']);
+        }
     }
 }

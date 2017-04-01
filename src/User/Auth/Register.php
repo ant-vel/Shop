@@ -12,10 +12,10 @@
 namespace Antvel\User\Auth;
 
 use Antvel\User\Models\User;
-use Antvel\User\Mail\Registration;
-use Illuminate\Contracts\Mail\Mailer;
+use Antvel\User\UsersRepository;
 use Illuminate\Session\Store as Session;
 use Antvel\User\Requests\RegisterRequest;
+use Antvel\User\Notifications\Registration;
 
 class Register
 {
@@ -41,13 +41,6 @@ class Register
     protected $session = null;
 
     /**
-     * The Laravel mail component.
-     *
-     * @var Mailer
-     */
-    protected $mailer = null;
-
-    /**
      * The response output.
      *
      * @var string
@@ -55,14 +48,21 @@ class Register
     protected $response = 'notOk';
 
     /**
+     * The user repository.
+     *
+     * @var UsersRepository
+     */
+    protected $users = null;
+
+    /**
      * Creates a new instance.
      *
-     * @param Mailer $mailer
+     * @param Session $session
      * @return void
      */
-    public function __construct(Mailer $mailer, Session $session)
+    public function __construct(Session $session, UsersRepository $users)
     {
-        $this->mailer = $mailer;
+        $this->users = $users;
         $this->session = $session;
     }
 
@@ -74,19 +74,16 @@ class Register
      */
     public function store(RegisterRequest $request): self
     {
-        //we create the user with the given request.
-        $this->user = User::create([
-            'password' => bcrypt($request->get('password')),
+        $this->user = $this->users->create([
+            'password' => $request->get('password'),
             'confirmation_token' => str_random(60),
             'nickname' => $request->get('email'),
             'email' => $request->get('email'),
             'role' => $this->role,
-        ]);
-
-        //we fill the given user profile information.
-        $this->user->profile()->create([
-            'first_name' => $request->get('first_name'),
-            'last_name'  => $request->get('last_name'),
+            'profile' => [
+                'first_name' => $request->get('first_name'),
+                'last_name'  => $request->get('last_name'),
+            ]
         ]);
 
         return $this;
@@ -108,14 +105,12 @@ class Register
     /**
      * Send the registration email.
      *
-     * @param  array  $template
+     * @param array $sections
      * @return self
      */
-    public function withEmail(array $template = []) : self
+    public function withEmail(array $sections = []) : self
     {
-        $this->mailer->send(
-            new Registration($this->user, $template)
-        );
+        $this->user->notify(new Registration($sections));
 
         return $this;
     }

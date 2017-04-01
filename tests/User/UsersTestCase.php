@@ -36,4 +36,14 @@ abstract class UsersTestCase extends TestCase
 			->create($data)
 			->first();
 	}
+
+	protected function getRepo()
+	{
+		return $this->app->make(\Antvel\User\UsersRepository::class);
+	}
+
+	protected function getPetitionRepo()
+	{
+		return $this->app->make(\Antvel\User\ChangeEmailRepository::class);
+	}
 }

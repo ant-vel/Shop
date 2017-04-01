@@ -13,7 +13,6 @@ namespace Antvel\User;
 
 use Carbon\Carbon;
 use Antvel\User\Models\User;
-use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Auth\Authenticatable;
 
@@ -70,22 +69,24 @@ class UsersRepository
     /**
      * Finds a given user in the database.
      *
-     * @param int $user_id
+     * @param mixed $constraints
      * @param array $loaders
      * @return null|Authenticatable
      */
-	public function find($user_id = null, ...$loaders)
+	public function find($constraints, ...$loaders)
 	{
-        //We fetch the user using either the given id. If the id was not given,
-        //we use the one in session..
-        $user = User::where('id', $user_id ?? $this->id)->first();
+        if (! is_array($constraints)) {
+            $constraints = ['id' => $constraints ?? $this->id];
+        }
 
-        //We throw an exception if the user was not found, so we avoid the fact
-        //that somebody tries to look for a non-existent user..
+        //We fetch the user using a given constraint.
+        $user = User::where($constraints)->first();
+
+        //We throw an exception if the user was not found to avoid whether
+        //somebody tries to look for a non-existent user.
         abort_if( ! $user, 404);
 
-        //If there was any requested loader, we will try to lazy load the relationship
-        //related to it within retrieved query.
+        //If loaders were requested, we will lazy load them.
         if (count($loaders) > 0) {
             $user->load(implode(',', $loaders));
         }
@@ -111,6 +112,27 @@ class UsersRepository
     }
 
     /**
+     * Creates a new user in the database.
+     *
+     * @param  array $data
+     * @return Authenticatable
+     */
+    public function create(array $data) : Authenticatable
+    {
+        $data = Parser::parse($data);
+
+        $user = User::create(
+            $data->except('profile')->all()
+        );
+
+        $user->profile()->create(
+            $data->only('profile')->collapse()->all()
+        );
+
+        return $user;
+    }
+
+    /**
      * Updates the user information with a given data.
      *
      * @param  Authenticatable $user
@@ -120,33 +142,10 @@ class UsersRepository
      */
     public function update($user, array $data, array $except = [])
     {
-        $data = $this->normalizeData(
-          $user, Collection::make($data)->except($except)
-        );
+        $data = Parser::parse($data, $user->id)->all();
 
         $user->fill($data)->save();
         $user->profile->fill($data)->save();
-    }
-
-    /**
-     * Returns a normalized data to be used within insert/update calls.
-     *
-     * @param  Authenticatable $user
-     * @param  Collection $data
-     * @return array
-     */
-    protected function normalizeData($user, Collection $data) : array
-    {
-        if ($data->has('password')) {
-            $data['password'] = bcrypt($data['password']);
-        }
-
-        if ($data->has('file')) {
-            $data['pic_url'] = $data['file']->store('img/profile/' . $user->id);
-            $data->forget('file');
-        }
-
-        return $data->all();
     }
 
     /**

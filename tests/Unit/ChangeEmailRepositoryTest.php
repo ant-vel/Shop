@@ -12,8 +12,8 @@
 namespace Antvel\Tests\Unit;
 
 use Carbon\Carbon;
-use Antvel\Tests\User\UsersTestCase;
 use Antvel\User\Models\EmailChangePetition;
+use Antvel\Tests\Features\Users\UsersTestCase;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 class ChangeEmailRepositoryTest extends UsersTestCase

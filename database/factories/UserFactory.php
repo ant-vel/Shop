@@ -11,6 +11,7 @@
 
 use Carbon\Carbon;
 use Faker\Generator as Faker;
+use Antvel\Foundation\Policies\Roles;
 use Antvel\User\Models\{ User, Person, Business, EmailChangePetition };
 
 $factory->define(User::class, function (Faker $faker) use ($factory)
@@ -21,7 +22,7 @@ $factory->define(User::class, function (Faker $faker) use ($factory)
         'facebook' => $faker->userName,
         'twitter' => '@'.$faker->userName,
         'email' => $faker->unique()->email,
-        'role' => array_rand(resolveTrans('globals.roles'), 1),
+        'role' => array_rand(Roles::allowed(), 1),
         'pic_url' => '/img/pt-default/'.$faker->numberBetween(1, 20).'.jpg',
         'preferences' => '{"product_viewed":[],"product_purchased":[],"product_shared":[],"product_categories":[],"my_searches":[]}',
     ];

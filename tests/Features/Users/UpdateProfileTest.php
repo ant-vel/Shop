@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Antvel\Tests\User;
+namespace Antvel\Tests\Features\Users;
 
 use Carbon\Carbon;
 use Antvel\User\Listeners\UpdateProfile;

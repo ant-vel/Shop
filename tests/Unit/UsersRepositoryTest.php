@@ -13,7 +13,7 @@ namespace Antvel\Tests\Unit;
 
 use Antvel\User\Models\Person;
 use Illuminate\Support\Collection;
-use Antvel\Tests\User\UsersTestCase;
+use Antvel\Tests\Features\Users\UsersTestCase;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 class UsersRepositoryTest extends UsersTestCase

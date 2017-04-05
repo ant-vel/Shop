@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use Antvel\Foundation\Policies\Roles;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -37,9 +38,9 @@ class CreateUsersTable extends Migration
             $table->string('time_zone')->nullable();
             $table->integer('rate_val')->nullable();
             $table->integer('rate_count')->nullable();
-            $table->enum('role', array_keys(resolveTrans('globals.roles')))->default('person');
-            $table->enum('type', array_keys(resolveTrans('globals.type_user')))->default('normal');
-            $table->enum('verified', array_keys(resolveTrans('globals.verification')))->default('no');
+            $table->enum('role', Roles::allowed())->default(Roles::default());
+            $table->enum('type', ['trusted', 'normal'])->default('normal');
+            $table->enum('verified', ['yes', 'no'])->default('no');
             $table->json('preferences')->nullable();
             $table->string('confirmation_token', 100)->nullable();
             $table->rememberToken();

@@ -47,8 +47,9 @@ class RoutesRegistrar
      */
     public function all()
     {
-        $this->forAddressBook();
         $this->forUser();
+        $this->forBackOffice();
+        $this->forAddressBook();
     }
 
     /**
@@ -104,6 +105,22 @@ class RoutesRegistrar
                 $router->patch('{action}/{user?}', 'SecurityController@update')->name('user.action');
 
             });
+
+        });
+    }
+
+    public function forBackOffice()
+    {
+        $this->router->group([
+
+            'namespace' => $this->namespace . '\BackOffice',
+            'middleware' => ['web', 'auth'],
+            'prefix' => 'backoffice',
+
+        ], function ($router) {
+
+            $router->get('/', 'DashBoardController@index')->name('backoffice.home');
+            $router->get('dashboard', 'DashBoardController@index')->name('backoffice.dashboard');
 
         });
     }

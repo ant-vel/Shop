@@ -9,9 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Antvel\Message;
+namespace Antvel\Foundation\Policies;
 
-class Messenger
+class Roles
 {
-	//
+	public static function default()
+	{
+		return 'person';
+	}
+
+	public static function allowed()
+	{
+		return ['nonprofit', 'admin', 'business', 'person'];
+	}
 }

@@ -45,6 +45,7 @@ class Parser
 	 *
 	 * @param  array  $data
 	 * @param  mixed $user_id
+	 *
 	 * @return array
 	 */
 	public static function parse(array $data, $user_id = null) : Collection

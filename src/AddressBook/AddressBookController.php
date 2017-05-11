@@ -11,8 +11,8 @@
 
 namespace Antvel\AddressBook;
 
+use Antvel\Http\Controller;
 use Illuminate\Http\Request;
-use Antvel\Foundation\Http\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AddressBookController extends Controller
@@ -29,12 +29,13 @@ class AddressBookController extends Controller
      *
      * @var string
      */
-    protected $redirecTo = '/user/address';
+    protected $redirecTo = '/addressBook';
 
     /**
      * Create a new Invitations instance.
      *
-     * @param Antvel\AddressBook\AddressBook $addressBook
+     * @param AddressBook $addressBook
+     *
      * @return  void
      */
     public function __construct(AddressBook $addressBook)
@@ -104,6 +105,7 @@ class AddressBookController extends Controller
      * Show the edition address form.
      *
      * @param int $id
+     *
      * @return void
      */
     public function edit(int $id)
@@ -118,6 +120,7 @@ class AddressBookController extends Controller
      *
      * @param  AddressBookFormRequest $request
      * @param  int $id
+     *
      * @return void
      */
     public function update(AddressBookRequest $request, int $id)
@@ -139,6 +142,7 @@ class AddressBookController extends Controller
      * Remove a given address.
      *
      * @param Request $request
+     *
      * @return Void
      */
     public function destroy(Request $request)

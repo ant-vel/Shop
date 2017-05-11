@@ -29,6 +29,7 @@ class SendNewEmailConfirmation implements ShouldQueue
      * Create a new event instance.
      *
      * @param array $request
+     *
      * @return void
      */
     public function __construct(Mailer $mailer)
@@ -39,6 +40,7 @@ class SendNewEmailConfirmation implements ShouldQueue
      * Handle the event.
      *
      * @param  ProfileWasUpdated  $event
+     *
      * @return void
      */
     public function handle(ProfileWasUpdated $event)

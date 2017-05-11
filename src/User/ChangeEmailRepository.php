@@ -20,6 +20,7 @@ class ChangeEmailRepository
      * Stores a new petition.
      *
      * @param  array  $data
+     *
      * @return EmailChangePetition
      */
     public function store(array $data) : EmailChangePetition
@@ -41,6 +42,7 @@ class ChangeEmailRepository
      * Refreshes the expiration date for a given petition.
      *
      * @param  EmailChangePetition $petition
+     *
      * @return EmailChangePetition
      */
     public function refresh(EmailChangePetition $petition) : EmailChangePetition
@@ -56,6 +58,7 @@ class ChangeEmailRepository
      * Creates a new petition.
      *
      * @param  array $data
+     *
      * @return EmailChangePetition
      */
     public function create(array $data) : EmailChangePetition
@@ -74,6 +77,7 @@ class ChangeEmailRepository
      *
      * @param  array $constraints
      * @param  integer $take
+     *
      * @return EmailChangePetition
      */
     public function findBy($constraints, $take = 1)
@@ -87,6 +91,7 @@ class ChangeEmailRepository
      * @param  int $user_id
      * @param  string $token
      * @param  string $email
+     *
      * @return EmailChangePetition
      */
     public function confirm($user_id, string $token, string $email)

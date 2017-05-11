@@ -11,7 +11,8 @@
 
 namespace Antvel\User\Requests;
 
-use Antvel\Foundation\Http\Request;
+use Antvel\Http\Request;
+use Illuminate\Container\Container;
 
 class LoginRequest extends Request
 {
@@ -37,7 +38,7 @@ class LoginRequest extends Request
             'password' => 'required',
         ];
 
-        if (! env('APP_DEBUG')) {
+        if (env('APP_ENV') === 'production') {
             $rules['g-recaptcha-response'] = 'required|recaptcha';
         }
 

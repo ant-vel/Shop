@@ -44,6 +44,7 @@ class ProfileWasUpdated
      *
      * @param array $request
      * @param Authenticatable $user
+     *
      * @return void
      */
     public function __construct(array $request, Authenticatable $user)

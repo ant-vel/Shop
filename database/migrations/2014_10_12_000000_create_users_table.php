@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use Antvel\Foundation\Policies\Roles;
+use Antvel\User\Policies\Roles;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 

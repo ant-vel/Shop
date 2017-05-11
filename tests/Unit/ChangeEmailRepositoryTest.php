@@ -66,11 +66,11 @@ class ChangeEmailRepositoryTest extends UsersTestCase
 
 		$petition = $this->repository->create($request);
 
-		$this->assertEquals($petition->expires_at, Carbon::now()->addMonth());
 		$this->assertEquals($petition->new_email, 'gustavoocanto@gmail.com');
 		$this->assertEquals($petition->old_email, $business->user->email);
 		$this->assertInstanceOf(Authenticatable::class, $petition->user);
 		$this->assertInstanceOf(EmailChangePetition::class, $petition);
+		$this->assertTrue($petition->expires_at->gt(Carbon::now()));
 		$this->assertEquals($petition->user_id, $business->user_id);
 	}
 
@@ -80,9 +80,9 @@ class ChangeEmailRepositoryTest extends UsersTestCase
 			$this->petition
 		);
 
-		$this->assertEquals($petition->expires_at, Carbon::now()->addMonth());
 		$this->assertInstanceOf(Authenticatable::class, $petition->user);
 		$this->assertInstanceOf(EmailChangePetition::class, $petition);
+		$this->assertTrue($petition->expires_at->gt(Carbon::now()));
 		$this->assertFalse((bool) $petition->confirmed);
 	}
 

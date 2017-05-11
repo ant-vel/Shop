@@ -51,6 +51,7 @@ class Login
      * Sets the path destination after user is logged in.
      *
      * @param  string $path
+     *
      * @return self
      */
     public function withRedirectTo(string $path) : self
@@ -64,6 +65,7 @@ class Login
      * Sets a failure message.
      *
      * @param  string $message
+     *
      * @return self
      */
     public function withFailedMessage(string $message) : self
@@ -77,6 +79,7 @@ class Login
      * Authenticates an user.
      *
      * @param  Illuminate\Http\Request $request
+     *
      * @return void
      */
     public function authenticate(Request $request)
@@ -101,6 +104,7 @@ class Login
      * Redirects back to the login page and send related errors.
      *
      * @param  Request $request
+     *
      * @return void
      */
     protected function redirectWithErrors(Request $request)

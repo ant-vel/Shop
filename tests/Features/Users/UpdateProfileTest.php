@@ -58,7 +58,7 @@ class UpdateProfileTest extends UsersTestCase
 
 		$updatedBusiness = $this->getRepo()->profile($business->user_id);
 
-		$this->assertEquals($petition->expires_at, Carbon::now()->addMonth());
+		$this->assertTrue($petition->expires_at->gt(Carbon::now()));
 		$this->assertTrue('gocanto@antvel.com' != $updatedBusiness->email);
 		$this->assertInstanceOf(EmailChangePetition::class, $petition);
 		$this->assertNull($petition->confirmed_at);

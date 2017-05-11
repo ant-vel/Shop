@@ -58,6 +58,7 @@ class Register
      * Creates a new instance.
      *
      * @param Session $session
+     *
      * @return void
      */
     public function __construct(Session $session, UsersRepository $users)
@@ -70,6 +71,7 @@ class Register
      * Registers a new user in the database.
      *
      * @param  RegisterRequest $request
+     *
      * @return self
      */
     public function store(RegisterRequest $request): self
@@ -93,6 +95,7 @@ class Register
      * Flashes the registration success message.
      *
      * @param  array  $message
+     *
      * @return self
      */
     public function withMessage(string $message = 'Process was successfully completed.') : self
@@ -106,6 +109,7 @@ class Register
      * Send the registration email.
      *
      * @param array $sections
+     *
      * @return self
      */
     public function withEmail(array $sections = []) : self
@@ -120,6 +124,7 @@ class Register
      *
      * @param  string $token
      * @param  string $email
+     *
      * @return void
      */
     public function confirm(string $token, string $email)
@@ -138,6 +143,7 @@ class Register
      * Flash a confirmation error message.
      *
      * @param  string $message
+     *
      * @return self
      */
     public function flashError(string $message) : self

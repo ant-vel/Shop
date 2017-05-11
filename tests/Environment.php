@@ -44,6 +44,7 @@ trait Environment
     protected function getEnvironmentSetUp($app)
     {
         $app['path.lang'] = $this->getFixturesDirectory('lang');
+        $app['path.storage'] = __DIR__ . "/../storage";
     }
 
     /**

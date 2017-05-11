@@ -69,6 +69,7 @@ class NewEmailConfirmation extends Mailable implements ShouldQueue
      * Returns the confirmation email subject.
      *
      * @param  string $key
+     *
      * @return string
      */
     public function getSubject($key)

@@ -36,6 +36,7 @@ class UpdateProfile
      *
      * @param Users $users
      * @param EmailPetitions $changeEmail
+     *
      * @return void
      */
     public function __construct(Users $users, ChangeEmail $changeEmail)
@@ -48,6 +49,7 @@ class UpdateProfile
      * Handle the event.
      *
      * @param  ProfileWasUpdated  $event
+     *
      * @return void
      */
     public function handle(ProfileWasUpdated $event)
@@ -70,6 +72,7 @@ class UpdateProfile
      * Checks whether the user changed his email address.
      *
      * @param  ProfileWasUpdated $event
+     *
      * @return bool
      */
     protected function emailWasChanged(ProfileWasUpdated $event) : bool
@@ -83,7 +86,9 @@ class UpdateProfile
 
     /**
      * Creates a new email petition.
+     *
      * @param  ProfileWasUpdated $event
+     *
      * @return void
      */
     protected function createNewEmailPetition(ProfileWasUpdated $event)

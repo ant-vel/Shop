@@ -11,9 +11,9 @@
 
 namespace Antvel\User;
 
+use Antvel\Http\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Events\Dispatcher;
-use Antvel\Foundation\Http\Controller;
 use Antvel\User\Requests\ProfileRequest;
 use Antvel\User\Events\ProfileWasUpdated;
 
@@ -85,6 +85,7 @@ class UsersController extends Controller
      *
      * @param  ProfileRequest $request
      * @param  int $user
+     *
      * @return void
      */
     public function update(ProfileRequest $request, $user_id = null)

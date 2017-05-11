@@ -11,19 +11,14 @@
 
 namespace Antvel\User\Models;
 
-use Illuminate\Auth\Authenticatable;
 use Antvel\AddressBook\Models\Address;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Antvel\User\Notifications\ResetPasswordNotification;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+class User extends Authenticatable
 {
-	use Authenticatable, CanResetPassword, SoftDeletes, Notifiable;
+    use Notifiable;
 
 	/**
      * The attributes that are mass assignable.
@@ -102,6 +97,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     // ======================================= //
     //        temporary while refactoring      //
     // ======================================= //
+
+    public function getCartCount()
+    {
+        return 0;
+    }
 
      public function hasRole($role)
     {

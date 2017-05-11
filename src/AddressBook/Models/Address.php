@@ -37,6 +37,11 @@ class Address extends Model
         'name_contact', 'zipcode', 'city'
     ];
 
+    /**
+     * The hidden attrubutes.
+     *
+     * @var array
+     */
     protected $hidden = ['id'];
 
     /**

@@ -11,7 +11,7 @@
 
 namespace Antvel\User\Requests;
 
-use Antvel\Foundation\Http\Request;
+use Antvel\Http\Request;
 
 class RegisterRequest extends Request
 {

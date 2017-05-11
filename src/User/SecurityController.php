@@ -11,8 +11,8 @@
 
 namespace Antvel\User;
 
+use Antvel\Http\Controller;
 use Illuminate\Http\Request;
-use Antvel\Foundation\Http\Controller;
 
 class SecurityController extends Controller
 {
@@ -27,6 +27,7 @@ class SecurityController extends Controller
      * Creates a new instance.
      *
      * @param UsersRepository $users
+     *
      * @return void
      */
 	public function __construct(UsersRepository $users)
@@ -39,6 +40,7 @@ class SecurityController extends Controller
      *
      * @param  string $token
      * @param  string $email
+     *
      * @return void
      */
     public function confirmEmail(string $token, string $email)
@@ -63,6 +65,7 @@ class SecurityController extends Controller
      *
      * @param  string $action
      * @param  int|null $user
+     *
      * @return void
      */
     public function update(string $action, $user = null)

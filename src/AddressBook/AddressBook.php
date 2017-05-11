@@ -39,6 +39,7 @@ class AddressBook
 	 *
 	 * @param  User|null $user
 	 * @param  string $sort
+	 *
 	 * @return Collection
 	 */
 	public function forUser(Authenticatable $user = null, string $sort = 'default') : Collection
@@ -52,6 +53,7 @@ class AddressBook
 	 * Retrieve a requested address.
 	 *
 	 * @param int $id
+	 *
 	 * @return Address
 	 */
 	public function find(int $id) : Address
@@ -63,6 +65,7 @@ class AddressBook
 	 * Create an address in the database.
 	 *
 	 * @param  array $data
+	 *
 	 * @return Address
 	 */
 	public function create(array $data, Authenticatable $user = null) : Address
@@ -80,6 +83,7 @@ class AddressBook
 	 * Crate a new address in the database and set it to default.
 	 *
 	 * @param  array $data
+	 *
 	 * @return Address
 	 */
 	public function createAndSetToDefault(array $data, Authenticatable $user = null) : Address
@@ -94,6 +98,7 @@ class AddressBook
 	 * Set to default a given address.
 	 *
 	 * @param Address\int $address
+	 *
 	 * @return void
 	 */
 	public function setDefault($address)
@@ -123,7 +128,8 @@ class AddressBook
 	/**
 	 * Destroy a given address.
 	 *
-	 * @param int $id [description]
+	 * @param int $id
+	 *
 	 * @return void
 	 */
 	public function destroy(int $id)

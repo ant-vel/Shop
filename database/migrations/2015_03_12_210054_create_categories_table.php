@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -27,8 +26,8 @@ class CreateCategoriesTable extends Migration
             $table->integer('category_id')->unsigned()->nullable();
             $table->string('name', 60);
             $table->string('description', 100);
-            $table->string('icon', 60);
-            $table->string('image', 100);
+            $table->string('icon', 60)->nullable();
+            $table->string('image', 100)->nullable();
             $table->boolean('status')->default(1);
             $table->enum('type', ['group', 'store'])->default('store');
 

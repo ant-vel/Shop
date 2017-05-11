@@ -11,6 +11,7 @@
 
 namespace Antvel;
 
+use Antvel\Http\Middleware\Managers;
 use Illuminate\Support\ServiceProvider;
 
 class AntvelServiceProvider extends ServiceProvider
@@ -57,7 +58,7 @@ class AntvelServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app['router']->aliasMiddleware('managers', Managers::class);
     }
 
     /**

@@ -38,6 +38,7 @@ class Registration extends Notification implements ShouldQueue
      * Create a new notification instance.
      *
      * @param array $sections
+     *
      * @return void
      */
     public function __construct(array $sections = [])
@@ -67,6 +68,7 @@ class Registration extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -78,6 +80,7 @@ class Registration extends Notification implements ShouldQueue
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
+     *
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
@@ -94,6 +97,7 @@ class Registration extends Notification implements ShouldQueue
      * Returns the confirmation url.
      *
      * @param \Illuminate\Contracts\Auth\Authenticatable $user
+     *
      * @return string
      */
     protected function route($user) : string

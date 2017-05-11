@@ -11,7 +11,7 @@
 
 namespace Antvel\AddressBook;
 
-use Antvel\Foundation\Http\Request;
+use Antvel\Http\Request;
 
 class AddressBookRequest extends Request
 {

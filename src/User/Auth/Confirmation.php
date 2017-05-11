@@ -43,6 +43,7 @@ class Confirmation
      *
      * @param string $token
      * @param string $email
+     *
      * @return void
      */
     public function __construct(string $token, string $email)
@@ -57,6 +58,7 @@ class Confirmation
      *
      * @param string $token
      * @param string $email
+     *
      * @return void
      */
     public static function make(string $token, string $email)

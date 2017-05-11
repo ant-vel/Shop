@@ -37,10 +37,7 @@
         ],
         "psr-4": {
             "Antvel\\": "src/"
-        },
-        "files": [
-            "src/Foundation/helpers.php"
-        ]
+        }
     },
 
     "autoload-dev": {

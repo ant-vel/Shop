@@ -18,7 +18,7 @@ class Antvel
      *
      * @var string
      */
-    const VERSION = '1.3.0';
+    const VERSION = '1.3.1';
 
     /**
      * All of the service bindings for Antvel.

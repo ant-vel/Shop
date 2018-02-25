@@ -18,7 +18,7 @@ class Antvel
      *
      * @var string
      */
-    const VERSION = '1.2.20';
+    const VERSION = '1.3.0';
 
     /**
      * All of the service bindings for Antvel.
@@ -71,7 +71,7 @@ class Antvel
      */
     public static function basePath($path = '')
     {
-        return realpath(__DIR__ . '/../').($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return realpath(__DIR__ . '/../') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -83,7 +83,7 @@ class Antvel
      */
     public static function resourcePath($path = '')
     {
-        return self::basePath().DIRECTORY_SEPARATOR.'resources'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return self::basePath() . DIRECTORY_SEPARATOR . 'resources' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
@@ -93,6 +93,6 @@ class Antvel
      */
     public static function langPath()
     {
-        return self::resourcePath().DIRECTORY_SEPARATOR.'lang';
+        return self::resourcePath() . DIRECTORY_SEPARATOR . 'lang';
     }
 }

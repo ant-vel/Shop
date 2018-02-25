@@ -20,8 +20,8 @@
     },
 
     "require": {
-        "php": "~7.0|~7.1",
-        "nesbot/carbon": "^1.21",
+        "php": "^7.1.3",
+        "nesbot/carbon": "^1.22.1",
         "illuminate/support": "5.6.*",
         "illuminate/http": "5.6.*",
         "illuminate/database": "5.6.*",
@@ -38,14 +38,14 @@
         "illuminate/notifications": "5.6.*",
         "illuminate/hashing": "5.6.*",
         "illuminate/auth": "5.6.*",
-        "intervention/image": "^2.4",
+        "intervention/image": "2.4.*",
         "ramsey/uuid": "^3.7"
     },
 
     "require-dev": {
         "phpunit/phpunit": "~7.0",
         "orchestra/testbench": "3.6.*",
-        "mockery/mockery": "0.9.*",
+        "mockery/mockery": "~1.0",
         "sebastian/diff": "^3.0"
     },
 
@@ -77,5 +77,9 @@
                 "Antvel\\AntvelServiceProvider"
             ]
         }
-    }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "prefer-stable": true
 }

@@ -11,14 +11,22 @@
 
 namespace Antvel\Tests;
 
-use Antvel\Antvel;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Illuminate\Foundation\Testing\TestResponse;
 
 abstract class TestCase extends Orchestra
 {
-    use Environment;
+    use Concerns\Environment,
+        Concerns\InteractWithUsers,
+        Concerns\InteractWithPictures;
+
+    /**
+     * The MySql testing db.
+     *
+     * This db is used just to test the queries related to products filters
+     * because SqlLite does not support queries against JSON columns.
+     */
+    const TESTING_DB = 'antvel_testing';
 
     /**
      * Setup the test environment
@@ -28,52 +36,8 @@ abstract class TestCase extends Orchestra
     public function setUp()
     {
         parent::setUp();
+
         $this->loadFactories();
         $this->loadMigrations();
-    }
-
-    /**
-     * Swaps the storage folder path.
-     *
-     * @return void
-     */
-    public function withStorageFolder()
-    {
-        $storage = __DIR__ . '/../storage/framework/testing/disks';
-
-        $this->app->make('config')->set(
-            'filesystems.disks.local.root',
-            $storage
-        );
-    }
-
-    /**
-     * Creates a fake file.
-     *
-     * @param  string $disk
-     * @param  string $file
-     *
-     * @return UploadedFile
-     */
-    public function uploadFile($disk = 'avatars', $file = 'antvel.jpg')
-    {
-        $this->withStorageFolder();
-
-        Storage::fake($disk);
-
-        return UploadedFile::fake()->image($file);
-    }
-
-    /**
-     * Returns a uploaded file name.
-     *
-     * @param  string $fileName
-     * @return string
-     */
-    protected function image($fileName)
-    {
-        $fileName = explode('/', $fileName);
-
-        return end($fileName);
     }
 }

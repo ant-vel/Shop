@@ -15,8 +15,6 @@ use Antvel\Categories\Models\Category;
 
 $factory->define(Category::class, function (Faker $faker) use ($factory)
 {
-    static $company;
-
     return [
         'name' => str_limit($faker->sentence, 50),
         'description' => str_limit($faker->paragraph, 90),

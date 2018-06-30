@@ -11,10 +11,6 @@
 
 namespace Antvel;
 
-use Illuminate\Container\Container;
-use Antvel\Http\Routes\AntvelRouter;
-use Illuminate\Support\Facades\Route;
-
 class Antvel
 {
     /**
@@ -22,67 +18,81 @@ class Antvel
      *
      * @var string
      */
-    const VERSION = '1.1.6';
+    const VERSION = '1.3.1';
 
     /**
-     * The Laravel container component.
+     * All of the service bindings for Antvel.
      *
-     * @var Container
+     * @return array
      */
-    protected $container = null;
-
-    /**
-     * Creates a new instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public static function bindings()
     {
-        $this->container = Container::getInstance();
-    }
-
-    /**
-     * Registers Antvel events and listeners.
-     *
-     * @return void
-     */
-    public static function events()
-    {
-        (new \Antvel\Support\EventsRegistrar)->registrar();
-    }
-
-    /**
-     * Register the antvel policies.
-     *
-     * @return void
-     */
-    public static function policies()
-    {
-        (new \Antvel\Support\PoliciesRegistrar)->registrar();
-    }
-
-    /**
-     * Get a Antvel route registrar.
-     *
-     * @param  callable|null $callback
-     * @param  array $options
-     *
-     * @return void
-     */
-    public static function routes($callback = null, array $options = [])
-    {
-        $callback = $callback ?: function ($router) {
-            AntvelRouter::make($router);
-        };
-
-        $defaultOptions = [
-            'namespace' => 'Antvel',
+        return [
+            Contracts\CategoryRepositoryContract::class => Categories\Repositories\CategoriesRepository::class,
+            Contracts\FeaturesRepositoryContract::class => Features\Repositories\FeaturesRepository::class,
         ];
+    }
 
-        $options = array_merge($defaultOptions, $options);
+    /**
+     * All of the service aliases for Antvel.
+     *
+     * @return array
+     */
+    public static function alias()
+    {
+        return [
+            'category.repository' => Categories\Repositories\CategoriesRepository::class,
+            'category.repository.cahe' => Categories\Repositories\CategoriesCacheRepository::class,
+            'product.features.repository' => Features\Repositories\FeaturesRepository::class,
+            'product.features.repository.cahe' => Features\Repositories\FeaturesCacheRepository::class,
+        ];
+    }
 
-        Route::group($options, function ($router) use ($callback) {
-            $callback($router);
-        });
+    /**
+     * The Antvel components services providers.
+     *
+     * @return array
+     */
+    public static function providers()
+    {
+        return [
+            Categories\CategoriesServiceProvider::class,
+            Companies\CompanyServiceProvider::class,
+            Users\UsersServiceProvider::class,
+        ];
+    }
+
+    /**
+     * Get the base path of the Antvel installation.
+     *
+     * @param string $path Optionally, a path to append to the base path
+     *
+     * @return string
+     */
+    public static function basePath($path = '')
+    {
+        return realpath(__DIR__ . '/../') . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+
+    /**
+     * Get the path to the resources directory.
+     *
+     * @param  string  $path
+     *
+     * @return string
+     */
+    public static function resourcePath($path = '')
+    {
+        return self::basePath() . DIRECTORY_SEPARATOR . 'resources' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+    }
+
+    /**
+     * Get the path to the language files.
+     *
+     * @return string
+     */
+    public static function langPath()
+    {
+        return self::resourcePath() . DIRECTORY_SEPARATOR . 'lang';
     }
 }

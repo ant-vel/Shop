@@ -1,10 +1,29 @@
 language: php
 
 php:
-  - 7.0
   - 7.1
 
-sudo: false
+services:
+  - mysql
+
+addons:
+  apt:
+    sources:
+      - mysql-5.7-trusty
+    packages:
+      - mysql-server
+
+dist: trusty
+sudo: required
+
+env:
+  - LARAVEL_VERSION=5.6.*
+
+before_script:
+  - composer self-update
+  - composer clear-cache
+  - composer require "laravel/framework:${LARAVEL_VERSION}"
+  - mysql -e 'create database antvel_testing;'
 
 before_install:
   - if [[ $TRAVIS_PHP_VERSION != 7.1 ]] ; then phpenv config-rm xdebug.ini; fi

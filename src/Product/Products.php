@@ -11,7 +11,7 @@
 
 namespace Antvel\Product;
 
-use Antvel\Contracts\Repository;
+use Antvel\Support\Repository;
 use Antvel\Product\Models\Product;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -19,6 +19,8 @@ use Antvel\Product\Parsers\FeaturesParser;
 
 class Products extends Repository
 {
+	use InteractWithPictures;
+
 	/**
 	 * Creates a new instance.
 	 *
@@ -41,30 +43,50 @@ class Products extends Repository
         $attributes = Collection::make($attributes);
 
         $attr = $attributes->except('features', 'pictures')->merge([
-            'features' => FeaturesParser::parse($attributes->only('pictures', 'features'))->toJson(),
+            'features' => \Antvel\Features\Parser::toJson($attributes->get('features')),
             'category_id' => $attributes->get('category'),
             'price' => $attributes->get('price') * 100,
             'cost' => $attributes->get('cost') * 100,
+            'status' => $attributes->get('status'),
             'created_by' => auth()->user()->id,
             'updated_by' => auth()->user()->id,
             'tags' => $attributes->get('name'),
         ])->all();
 
-		return Product::create($attr);
+        $product = Product::create($attr);
+
+        $this->createPicturesFor($product, $attributes);
+
+        return $product;
     }
 
     /**
      * Update a Model in the database.
      *
      * @param array $attributes
-     * @param Category|mixed $idOrModel
+     * @param Product|mixed $idOrModel
      * @param array $options
      *
      * @return bool
      */
     public function update(array $attributes, $idOrModel, array $options = [])
     {
-    	//
+    	$product = $this->modelOrFind($idOrModel);
+    	$attributes = Collection::make($attributes);
+
+    	$attr = $attributes->except('features', 'pictures', 'default_picture')->merge([
+            'features' => \Antvel\Features\Parser::toJson($attributes->get('features')),
+            'category_id' => $attributes->get('category'),
+            'price' => $attributes->get('price') * 100,
+            'cost' => $attributes->get('cost') * 100,
+            'status' => $attributes->get('status'),
+            'updated_by' => auth()->user()->id,
+            'tags' => $attributes->get('name'),
+        ])->all();
+
+    	$this->updatePicturesFor($product, $attributes);
+
+    	return $product->update($attr);
     }
 
 	/**
@@ -79,42 +101,8 @@ class Products extends Repository
 	{
 		return $this->getModel()
 			->with('category')
-			->actives()
+			->actives() //it needs to go into the query object as well
 			->filter($request)
 			->orderBy('rate_val', 'desc');
-	}
-
-	/**
-	 * Generates a suggestion based on a given constraints.
-	 *
-	 * @param  \Illuminate\Support\Collection $products
-	 * @param  int $limit
-	 *
-	 * @return \Illuminate\Support\Collection
-	 */
-	public function suggestFor($products, $key = 'my_searches', int $limit = 8)
-	{
-		return Cache::remember('suggestions_for_searched_products', 5, function () use ($products, $key, $limit) {
-			return ProductsSuggestions::from($key, $products)
-				->take($limit)
-				->all();
-		});
-	}
-
-	/**
-	 * Returns a products suggestion based on user's preferences.
-	 *
-	 * @param mixed $filters
-	 * @param int $limit
-	 *
-	 * @return array
-	 */
-	public function suggestForPreferences($filters = [], $limit = 4, $preferences = null) : array
-	{
-		$filters = is_string($filters) ? [$filters] : $filters;
-
-		return ProductsSuggestions::make($filters, $preferences)
-			->take($limit)
-			->all();
 	}
 }

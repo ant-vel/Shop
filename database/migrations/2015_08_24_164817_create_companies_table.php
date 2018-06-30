@@ -23,6 +23,8 @@ class CreateCompaniesTable extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('company_id')->unsigned()->nullable();
+            $table->boolean('default')->default(0);
 
             //Profile information
             $table->string('name', 100);
@@ -30,7 +32,6 @@ class CreateCompaniesTable extends Migration
             $table->string('email', 100)->unique();
             $table->string('logo', 100)->nullable();
             $table->string('slogan', 100)->nullable();
-            $table->string('theme', 50)->nullable();
             $table->boolean('status')->default(1);
 
             //Contact information
@@ -48,18 +49,14 @@ class CreateCompaniesTable extends Migration
             $table->string('website', 150);
             $table->string('twitter', 100)->nullable();
             $table->string('facebook', 100)->nullable();
-            $table->string('facebook_app_id', 50)->nullable();
-            $table->string('google_plus', 100)->nullable();
-            $table->string('google_maps_key_api', 50)->nullable();
 
             //SEO information
             $table->longText('keywords');
 
             //CMS information
-            $table->longText('about_us');
-            $table->longText('refund_policy');
-            $table->longText('privacy_policy');
-            $table->longText('terms_of_service');
+            $table->mediumText('about');
+            $table->mediumText('terms');
+            $table->mediumText('refunds');
 
             $table->timestamps();
             $table->softDeletes();
@@ -73,6 +70,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('companies');
+        Schema::dropIfExists('companies');
     }
 }

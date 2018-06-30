@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-use Antvel\User\Policies\Roles;
+use Antvel\Users\Policies\Roles;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
@@ -33,7 +33,7 @@ class CreateUsersTable extends Migration
             $table->string('phone_number', 20)->nullable();
             $table->enum('gender', ['female', 'male'])->default('male');
             $table->date('birthday')->nullable();
-            $table->text('pic_url')->nullable();
+            $table->text('image')->nullable();
             $table->string('facebook', 100)->nullable();
             $table->string('twitter', 100)->nullable();
             $table->string('website', 100)->nullable();
@@ -42,7 +42,7 @@ class CreateUsersTable extends Migration
             $table->string('description', 150)->nullable();
             $table->integer('rate_val')->nullable();
             $table->integer('rate_count')->nullable();
-            $table->json('preferences')->nullable();
+            $table->json('preferences')->nullable()->default(null);
             $table->boolean('verified')->default(false);
             $table->string('confirmation_token', 60)->nullable();
 
@@ -60,6 +60,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('users');
+        Schema::dropIfExists('users');
     }
 }

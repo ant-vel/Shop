@@ -11,20 +11,20 @@
 
 namespace Antvel;
 
-use Antvel\Http\Middleware\Managers;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AntvelServiceProvider extends ServiceProvider
 {
     /**
-     * Bootstrap the application services.
+     * Bootstrap any application services.
      *
      * @return void
      */
     public function boot()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'antvel');
+        $this->registerRoutes();
+        $this->registerResources();
     }
 
     /**
@@ -34,7 +34,70 @@ class AntvelServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['router']->aliasMiddleware('managers', Managers::class);
+        $this->registerServices();
+        $this->registerProviders();
+        $this->registerServicesAliases();
+    }
+
+    /**
+     * Register the Antvel resources.
+     *
+     * @return void
+     */
+    protected function registerResources()
+    {
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'antvel');
+    }
+
+    /**
+     * Register the Antvel routes.
+     *
+     * @return void
+     */
+    protected function registerRoutes()
+    {
+        Route::namespace('Antvel')->middleware('web')->group(function () {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        });
+    }
+
+    /**
+     * Register Antvel services in the container.
+     *
+     * @return void
+     */
+    protected function registerServices()
+    {
+        foreach (Antvel::bindings() as $key => $value) {
+            is_numeric($key)
+                ? $this->app->singleton($value)
+                : $this->app->singleton($key, $value);
+        }
+    }
+
+    /**
+     * Register Antvel services aliases in the container.
+     *
+     * @return void
+     */
+    protected function registerServicesAliases()
+    {
+        foreach (Antvel::alias() as $key => $value) {
+            $this->app->alias($value, $key);
+        }
+    }
+
+    /**
+     * Register Antvel services providers.
+     *
+     * @return void
+     */
+    protected function registerProviders()
+    {
+        foreach (Antvel::providers() as $provider) {
+            $this->app->register($provider);
+        }
     }
 
     /**

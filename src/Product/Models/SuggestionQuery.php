@@ -62,13 +62,17 @@ class SuggestionQuery
 	 *
 	 * @return Builder
 	 */
-	public function apply($constraints)
+	public function apply($constraints) : Builder
 	{
-		if ($this->type == 'product_categories') {
+		if ($constraints && $this->type == 'product_categories') {
 			return $this->builder->whereIn('category_id', $constraints);
 		}
 
-		return $this->filterByConstraints($constraints);
+		if ($constraints && is_array($constraints)) {
+			return $this->filterByConstraints($constraints);
+		}
+
+		return $this->builder;
 	}
 
 	/**
@@ -78,19 +82,17 @@ class SuggestionQuery
 	 *
 	 * @return Builder
 	 */
-	protected function filterByConstraints(array $constraints)
+	protected function filterByConstraints($constraints) : Builder
 	{
-		if (count($constraints) > 0) {
-			$this->builder->where(function($query) use ($constraints) {
-				foreach ($constraints as $filter) {
-					if (trim($filter) != '') {
-						$query->orWhere('tags', 'like', '%' . $filter . '%');
-					}
+		$this->builder->where(function($query) use ($constraints) {
+			foreach ($constraints as $filter) {
+				if (trim($filter) != '') {
+					$query->orWhere('tags', 'like', '%' . $filter . '%');
 				}
+			}
 
-				return $query;
-			});
-		}
+			return $query;
+		});
 
 		return $this->builder;
 	}

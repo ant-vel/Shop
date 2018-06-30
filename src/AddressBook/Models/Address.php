@@ -11,7 +11,7 @@
 
 namespace Antvel\AddressBook\Models;
 
-use Antvel\User\Models\User;
+use Antvel\Users\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -34,7 +34,8 @@ class Address extends Model
     protected $fillable = [
         'line1', 'line2', 'phone',
         'country', 'state', 'user_id',
-        'name_contact', 'zipcode', 'city'
+        'name_contact', 'zipcode', 'city',
+        'updated_at', 'default'
     ];
 
     /**
@@ -43,6 +44,29 @@ class Address extends Model
      * @var array
      */
     protected $hidden = ['id'];
+
+    /**
+     * The default relations.
+     *
+     * @var array
+     */
+    protected $with = ['user'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'default' => 'boolean',
+    ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * An address belongs to an user.

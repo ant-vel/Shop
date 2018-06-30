@@ -11,12 +11,15 @@
 
 namespace Antvel\Product\Models;
 
-use Antvel\User\Models\User;
+use Antvel\Users\Models\User;
 use Antvel\Categories\Models\Category;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
+    use Concerns\Pictures,
+        Concerns\InteractWithGroups;
+
     /**
      * The database table used by the model.
      *
@@ -29,7 +32,10 @@ class Product extends Model
      *
      * @var array
      */
-    protected $appends = ['num_of_reviews']; //while refactoring
+    protected $appends = [
+        'num_of_reviews', //while refactoring
+        'default_picture',
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -39,7 +45,7 @@ class Product extends Model
     protected $fillable = [
         'category_id', 'created_by', 'updated_by', 'name', 'description', 'price', 'cost',
         'stock', 'features', 'barcode', 'condition', 'rate_val', 'tags', 'brand',
-        'rate_count', 'low_stock', 'status', 'parent_id',
+        'rate_count', 'low_stock', 'status', 'view_counts', 'grouping'
     ];
 
     /**
@@ -48,6 +54,22 @@ class Product extends Model
      * @var array
      */
     protected $hidden = ['details', 'created_at'];
+
+    /**
+     * The default relations.
+     *
+     * @var array
+     */
+    protected $with = ['pictures'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'status' => 'boolean',
+    ];
 
     /**
      * A product belongs to an user.
@@ -89,15 +111,7 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    /**
-     * A product has many groups.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function group()
-    {
-        return $this->hasMany($this, 'products_group', 'products_group');
-    }
+
 
     /**
      * Filter users upon type requested.
@@ -113,19 +127,30 @@ class Product extends Model
     }
 
     /**
-     * Returns suggestions for a given constraints.
+     * Returns a products list for the given feature key.
      *
      * @param  Illuminate\Database\Eloquent\Builder $query
-     * @param  string $type
-     * @param  array $constraints
+     * @param  string $key
      *
      * @return Illuminate\Database\Eloquent\Builder
      */
-    public function scopeSuggestionsFor($query, string $type, array $constraints)
+    public function scopeByFeaturesKey($query, string $key)
     {
-        return (new SuggestionQuery($query))
-            ->type($type)
-            ->apply($constraints);
+        return $query->whereNotNull("features->" . $key);
+    }
+
+    /**
+     * Returns suggestions for a given tags and type.
+     *
+     * @param  Illuminate\Database\Eloquent\Builder $query
+     * @param  string $type
+     * @param  array $tags
+     *
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSuggestionsFor($query, string $type, array $tags)
+    {
+        return (new SuggestionQuery($query))->type($type)->apply($tags);
     }
 
     /**
@@ -184,10 +209,6 @@ class Product extends Model
     }
 
     /////////// while refactoring
-    public function details()
-    {
-        return $this->hasMany('App\OrderDetail');
-    }
 
     public function getNumOfReviewsAttribute()
     {

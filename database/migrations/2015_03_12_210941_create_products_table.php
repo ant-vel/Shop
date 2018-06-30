@@ -27,8 +27,6 @@ class CreateProductsTable extends Migration
             $table->integer('category_id')->unsigned();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned()->nullable();
-            $table->integer('parent_id')->nullable();
-            $table->integer('products_group')->unsigned()->nullable();
             $table->boolean('status')->default(1);
             $table->enum('type', Attributes::make('type')->keys())->default('item');
             $table->string('name', 100);
@@ -61,6 +59,6 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('products');
+        Schema::dropIfExists('products');
     }
 }

@@ -34,8 +34,9 @@ class CreateAddressesTable extends Migration
             $table->string('country', 100);
             $table->string('state', 100);
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
             $table->softDeletes();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -46,6 +47,6 @@ class CreateAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('addresses');
+        Schema::dropIfExists('addresses');
     }
 }

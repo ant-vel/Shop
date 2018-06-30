@@ -12,29 +12,21 @@
 namespace Antvel\Categories;
 
 use Antvel\Http\Controller;
-use Antvel\Categories\Categories;
 use Antvel\Categories\Models\Category;
 use Antvel\Categories\Requests\CategoriesRequest;
 
 class CategoriesController extends Controller
 {
-	/**
-	 * The categories repository.
-	 *
-	 * @var Categories
-	 */
-	protected $categories = null;
-
-	/**
-     * Creates a new instance.
-     *
-     * @param Categories $categories
+    /**
+     * Shows categories list.
      *
      * @return void
      */
-	public function __construct(Categories $categories)
+    public function index()
     {
-        $this->categories = $categories;
+        return view('dashboard.sections.categories.index', [
+            'categories' => Category::with('parent')->paginate(50),
+        ]);
     }
 
     /**
@@ -44,9 +36,9 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-    	return view('dashboard.sections.categories.create', [
-    		'parents' => $this->categories->parents(),
-    	]);
+        return view('dashboard.sections.categories.create', [
+            'parents' => Category::parents()->get()
+        ]);
     }
 
     /**
@@ -58,46 +50,32 @@ class CategoriesController extends Controller
      */
     public function store(CategoriesRequest $request)
     {
-    	$category = $this->categories->create(
-    		$request->all()
-    	);
+        $category = Category::create(
+            $request->all()
+        );
 
-    	return redirect()->route('categories.edit', [
-    		'category' => $category->id
-    	])->with('status', trans('globals.success_text'));
+        return redirect()->route('categories.edit', $category)->with(
+            'status', trans('globals.success_text')
+        );
     }
 
     /**
-     * Shows categories list.
+     * Edits a given category.
+     *
+     * @param  Category $category
      *
      * @return void
      */
-	public function index()
-	{
-        return view('dashboard.sections.categories.index', [
-			'categories' => $this->categories->paginateWith('parent'),
-		]);
-	}
+    public function edit(Category $category)
+    {
+        return view('dashboard.sections.categories.edit', [
+            'hasParent' => ! is_null($category->parent),
+            'parents' => Category::parents()->get(),
+            'category' => $category->load('parent'),
+        ]);
+    }
 
-	/**
-	 * Edits a given category.
-	 *
-	 * @param  Category $category
-     *
-	 * @return void
-	 */
-	public function edit(Category $category)
-	{
-		$category = $category->load('parent');
-
-		return view('dashboard.sections.categories.edit', [
-			'hasParent' => ! is_null($category->parent),
-			'parents' => $this->categories->parents(),
-			'category' => $category,
-		]);
-	}
-
-	/**
+    /**
      * Updates the given category.
      *
      * @param  CategoriesRequest $request
@@ -105,12 +83,15 @@ class CategoriesController extends Controller
      *
      * @return void
      */
-	public function update(CategoriesRequest $request, Category $category)
-	{
-		$update = $this->categories->update(
-			$request->all(), $category
-		);
+    public function update(CategoriesRequest $request, Category $category)
+    {
+        $category->update(
+            $request->all()
+        );
 
-		return back()->with('status', trans('globals.success_text'));
-	}
+        return redirect()->route('categories.edit', $category)->with(
+            'status', trans('globals.success_text')
+        );
+    }
+
 }

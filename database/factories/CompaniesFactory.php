@@ -11,28 +11,24 @@
 
 use Carbon\Carbon;
 use Faker\Generator as Faker;
-use Antvel\Company\Models\Company;
+use Antvel\Companies\Models\Company;
 
 $factory->define(Company::class, function (Faker $faker) use ($factory)
 {
-    $name = str_replace('-', ' ', $faker->unique()->company);
-    $username = str_replace([' ', ','], '', $name);
-    $domain = $username . $faker->randomElement(['.com', '.net', '.org']);
-
     return [
         //Profile information
-        'name' => $name = $faker->unique()->company,
-        'description' => $faker->text(200),
-        'email' => 'info@'.$domain,
-        'logo' => '/img/pt-default/'.$faker->unique()->numberBetween(1, 330).'.jpg',
+        'name' => 'Antvel e-commerce',
+        'description' => 'Laravel e-commerce solution.',
+        'email' => $faker->unique()->safeEmail,
+        'logo' => '/images/pt-default/' . $faker->unique()->numberBetween(1, 330) . '.jpg',
         'slogan' => $faker->catchPhrase,
-        'theme' => null,
         'status' => true,
+        'default' => false,
 
         //Contact information
-        'contact_email' => 'contact@' . $domain,
-        'sales_email' => 'sales@' . $domain,
-        'support_email' => 'support@' . $domain,
+        'contact_email' => $faker->unique()->safeEmail,
+        'sales_email' => $faker->unique()->safeEmail,
+        'support_email' => $faker->unique()->safeEmail,
         'phone_number' => $faker->e164PhoneNumber,
         'cell_phone' => $faker->e164PhoneNumber,
         'address' => $faker->streetAddress,
@@ -41,20 +37,24 @@ $factory->define(Company::class, function (Faker $faker) use ($factory)
         'zip_code' => $faker->postcode,
 
         //Social information
-        'website' => 'http://' . $domain,
-        'twitter' => 'https://twitter.com/' . $username,
-        'facebook' => 'https://www.facebook.com/' . $username,
-        'facebook_app_id' => $faker->md5,
-        'google_plus' => 'https://plus.google.com/u/0/+' . $username,
-        'google_maps_key_api' => $faker->md5,
+        'website' => 'http://antvel.com',
+        'twitter' => 'https://twitter.com/_antvel',
+        'facebook' => 'https://www.facebook.com/antvelecommerce',
 
         //SEO information
         'keywords' => implode(',', $faker->words(20)),
 
         //CMS information
-        'about_us' => $faker->text(500),
-        'refund_policy' => $faker->text(500),
-        'privacy_policy' => $faker->text(500),
-        'terms_of_service' => $faker->text(500),
+        'about' => $faker->text(500),
+        'terms' => $faker->text(500),
+        'refunds' => $faker->text(500),
+    ];
+});
+
+$factory->state(Company::class, 'default', function ($faker) {
+    return [
+        'name' => 'Antvel e-commerce (default)',
+        'description' => 'Laravel e-commerce solution.',
+        'default' => true
     ];
 });

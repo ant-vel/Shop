@@ -45,6 +45,6 @@ class CreateEmailChangePetitionsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('email_change_petitions');
+        Schema::dropIfExists('email_change_petitions');
     }
 }

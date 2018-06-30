@@ -71,6 +71,36 @@ class ProductsRequestTest extends TestCase
 	}
 
 	/** @test */
+	function the_product_status_is_required()
+	{
+		$request = $this->submit(['status' => '']);
+
+		$validator = Validator::make(
+	    	$request->all(), $request->rules()
+	    );
+
+		tap($validator->messages(), function ($messages) {
+			$this->assertTrue($messages->has('status'));
+			$this->assertEquals('validation.required', array_first($messages->get('status')));
+		});
+	}
+
+	/** @test */
+	function the_product_status_has_to_be_boolean()
+	{
+		$request = $this->submit(['status' => 'foo']);
+
+		$validator = Validator::make(
+	    	$request->all(), $request->rules()
+	    );
+
+		tap($validator->messages(), function ($messages) {
+			$this->assertTrue($messages->has('status'));
+			$this->assertEquals('validation.boolean', array_first($messages->get('status')));
+		});
+	}
+
+	/** @test */
 	function the_product_cost_has_to_be_numeric()
 	{
 	    $request = $this->submit(['cost' => 'bar']);
@@ -80,6 +110,19 @@ class ProductsRequestTest extends TestCase
 		tap($validator->messages(), function ($messages) {
 			$this->assertTrue($messages->has('cost'));
 			$this->assertEquals('validation.numeric', array_first($messages->get('cost')));
+		});
+	}
+
+	/** @test */
+	function the_product_cost_has_to_be_in_the_integers_range()
+	{
+		$request = $this->submit(['cost' => 1000000000]);
+
+		$validator = Validator::make($request->all(), $request->rules());
+
+		tap($validator->messages(), function ($messages) {
+			$this->assertTrue($messages->has('cost'));
+			$this->assertEquals('validation.max.numeric', array_first($messages->get('cost')));
 		});
 	}
 
@@ -108,6 +151,34 @@ class ProductsRequestTest extends TestCase
 		tap($validator->messages(), function ($messages) {
 			$this->assertTrue($messages->has('price'));
 			$this->assertEquals('validation.numeric', array_first($messages->get('price')));
+		});
+	}
+
+		/** @test */
+	function the_product_price_has_to_be_in_the_integers_range()
+	{
+		$request = $this->submit(['price' => 1000000000]);
+
+		$validator = Validator::make($request->all(), $request->rules());
+
+		tap($validator->messages(), function ($messages) {
+			$this->assertTrue($messages->has('price'));
+			$this->assertEquals('validation.max.numeric', array_first($messages->get('price')));
+		});
+	}
+
+	/** @test */
+	function the_product_brand_is_required()
+	{
+		$request = $this->submit(['brand' => '']);
+
+		$validator = Validator::make(
+	    	$request->all(), $request->rules()
+	    );
+
+	    tap($validator->messages(), function ($messages) {
+	    	$this->assertTrue($messages->has('brand'));
+			$this->assertEquals('validation.required', array_first($messages->get('brand')));
 		});
 	}
 
@@ -259,12 +330,12 @@ class ProductsRequestTest extends TestCase
 	/** @test */
 	function it_builds_dynamic_features_rules_based_upon_request()
 	{
-		$featureRequired = factory('Antvel\Product\Models\ProductFeatures')->states('filterable')->create([
+		$featureRequired = factory('Antvel\Features\Models\Feature')->states('filterable')->create([
 			'name' => 'featureRequired',
 			'validation_rules' => 'required'
 		]);
 
-		$featureMaxAndMin = factory('Antvel\Product\Models\ProductFeatures')->states('filterable')->create([
+		$featureMaxAndMin = factory('Antvel\Features\Models\Feature')->states('filterable')->create([
 			'name' => 'featureMaxAndMin',
 			'validation_rules' => 'max:20|min:10'
 		]);

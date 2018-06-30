@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Antvel\Tests\Images\Unit;
+namespace Antvel\Tests\Unit\Images;
 
 use Antvel\Tests\TestCase;
 use Antvel\Support\Images\Render;
